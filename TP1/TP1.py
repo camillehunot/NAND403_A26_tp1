@@ -11,7 +11,9 @@ from PySide6.QtWidgets import (
 json_path = input("Donner le path du fichier Json") #mettre le lienpath
 
 try: 
-    file = open(json_path) #ouvre le fichier
+    file = open(json_path, encoding="utf-8") #ouvre le fichier 
+# encoding="utf-8" sert à régler le problème des accents
+
     data = json.load(file) #met le fichier dans une variable
 
 except:
@@ -28,14 +30,26 @@ headers = list(data[0].keys()) #permet de récupérer les headers en ce basant s
 #attention si data[1] ne possède pas le même nombre de key il faudrait trouver une facon de combinner les informations. 
 
 tableau = QTableWidget() #définition de notre tableau
-tableau.setRowCount(len(data)) #len data nous permet de vérifier combien de ligne sont nécessaires en se basa sur la taille de data
-tableau.setColumnCount(len(headers))#pour le moment fonctionne mais seulement si toute les ligne ont le meme nombre de key
-tableau.setHorizontalHeaderLabels(headers) #
+tableau.setRowCount(len(data)) #len data nous permet de vérifier combien de ligne en se basant sur la taille de data. Définit le nombre de ligne
+tableau.setColumnCount(len(headers))#pour le moment fonctionne mais seulement si toute les ligne ont le meme nombre de key. Définit le nombre de colonne
+tableau.setHorizontalHeaderLabels(headers) #définit le titre des columns
 
-for i in range(len(data)): #pour chaque élément du tableau : fonction range
-    item = data[i]
-    #index rangee, index colonne index valeur
-    tableau.setItem(i, len(headers), QTableWidgetItem(item["keys"]))
+
+
+for row in range(len(data)):
+    for column in range(len(headers)):
+        values = data[row][headers[column]] #récupère la values présente a cette ligne et colonne
+        valuesTexte = (str(values)) #permet d'inscrire les chiffres en string
+        #attention nous allons devoir quand même faire une manipulation plus tard si l'on souhaite
+        #trié en ordre de chiffre
+
+        tableau.setItem(row, column, QTableWidgetItem(valuesTexte))
+      #  tableau.setItem(row, len(headers), QTableWidgetItem(values))
+        
+
+    
+
+
 
 
 window = QMainWindow();
