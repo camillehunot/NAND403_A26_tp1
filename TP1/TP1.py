@@ -5,6 +5,9 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QTableWidget,
     QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
+    QLabel
 )
 from PySide6.QtCore import Qt #permet de configurer le comportement de facon précise des widgets pyside6
 #ex : necessaire pour trier les colonnes.
@@ -58,12 +61,35 @@ print(name)
 print(size)
 print(element)
 
+#>>>>>>>>> mise en forme
+
+main_window = QWidget() #fenetre principale
+main_window.setWindowTitle("TP1 Camille B Hunot")
+main_window.resize(800, 500) # déterminer la taille de la fenetre principale
+
+#main box
+main_box = QVBoxLayout()
+main_window.setLayout(main_box)#mettre le main box dans notre main window
+
+#titre-name
+titre = QLabel(f"Visualisation de : {name}") #affiche le nom du fichier visualisé en en-tete
+titre.setStyleSheet("font-size : 16px; font-weight: bold;")
+main_box.addWidget(titre)#place le titre dans la main box
+
+#ajouter le tableau
+tableau = QTableWidget() #définition de notre tableau
+main_box.addWidget(tableau)
+
+#ajouter autres infos
+texte_info = QLabel(f"Nom du fichier : {name}\ntaille : {size} ko \nQuantité : {element}")
+main_box.addWidget(texte_info)
+
+
 # >>>>>>>>> ici on va mettre en forme les bases du tableau, nbr de colonne et de ligne etc <<<<<<<
 
 headers = list(data[0].keys()) #permet de récupérer les headers en ce basant sur la première liste(position 0), leur quantité et leur nom
 #attention si data[1] ne possède pas le même nombre de key il faudrait trouver une facon de combinner les informations. 
 
-tableau = QTableWidget() #définition de notre tableau
 tableau.setRowCount(len(data)) #len data nous permet de vérifier combien de ligne en se basant sur la taille de data. Définit le nombre de ligne
 tableau.setColumnCount(len(headers))#pour le moment fonctionne mais seulement si toute les ligne ont le meme nombre de key. Définit le nombre de colonne
 tableau.setHorizontalHeaderLabels(headers) #définit le titre des columns
@@ -97,7 +123,21 @@ for row in range(len(data)):
 
 
 #>>>>> initialisation et fermeture de l'interface <<<<<<
-window = QMainWindow();
-window.setCentralWidget(tableau) #on ne voit pas le tableau sans cette ligne
-window.show()
+
+
+
+
+
+
+#vertical_box = QVBoxLayout()
+
+#widget.setLayout(vertical_box) #on place vertical box dans widget
+
+#window = QMainWindow()
+
+#window.setCentralWidget(tableau) #on ne voit pas le tableau sans cette ligne
+#vertical_box.addWidget(tableau)
+
+
+main_window.show()
 sys.exit(app.exec()) #important sinon la fenetre ne va jamais se fermer
