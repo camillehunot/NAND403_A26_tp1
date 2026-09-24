@@ -7,7 +7,10 @@ from PySide6.QtWidgets import (
     QTableWidgetItem,
     QVBoxLayout,
     QWidget,
-    QLabel
+    QLabel,
+    QHBoxLayout,
+    QLineEdit,
+    QPushButton,
 )
 from PySide6.QtCore import Qt #permet de configurer le comportement de facon précise des widgets pyside6
 #ex : necessaire pour trier les colonnes.
@@ -76,6 +79,8 @@ titre = QLabel(f"Visualisation de : {name}") #affiche le nom du fichier visualis
 titre.setStyleSheet("font-size : 16px; font-weight: bold;")
 main_box.addWidget(titre)#place le titre dans la main box
 
+
+
 #ajouter le tableau
 tableau = QTableWidget() #définition de notre tableau
 main_box.addWidget(tableau)
@@ -83,6 +88,8 @@ main_box.addWidget(tableau)
 #ajouter autres infos
 texte_info = QLabel(f"Nom du fichier : {name}\ntaille : {size} ko \nQuantité : {element}")
 main_box.addWidget(texte_info)
+
+
 
 
 # >>>>>>>>> ici on va mettre en forme les bases du tableau, nbr de colonne et de ligne etc <<<<<<<
@@ -97,6 +104,9 @@ tableau.setSortingEnabled(True)#autorise a trier le tableau en fonction des colo
 tableau.sortByColumn(0, Qt.SortOrder.AscendingOrder) #trier en ordre croissant la première ligne de facon automatique
 
 
+
+
+    
 
 #>>>>>>>>>> Mettre les values dans nos cases <<<<<<
 
@@ -121,6 +131,35 @@ for row in range(len(data)):
         tableau.setItem(row, column, QTableWidgetItem(values)) #permet de placé la value dans le tableau
         
 
+#>>>>> recherche
+#recherche
+recherche_box = QHBoxLayout()
+recherche_ligne = QLineEdit()
+recherche_ligne.setPlaceholderText("Rechercher")
+recherche_cta = QPushButton("go")
+
+
+recherche_box.addWidget(recherche_ligne)
+recherche_box.addWidget(recherche_cta)
+main_box.addLayout(recherche_box)
+
+def recherche(texte_cherche,values):
+    texte_recherche = texte_recherche.lower() #permet d'ignorer les majuscules
+    for row in range(len(data)):
+        texte_true = False #on commence par dire que la ligne ne correspond pas
+
+        for column in range(len(headers)):
+            if values and texte_recherche in values.text().lower():
+                texte_true = True
+                break
+        #if texte_true:
+          #  tableau.setRowHidden(row, False) #si c'est vrai on cache pas la ligne
+       # else:
+           # tableau.setRowHidden(row, True)   
+        tableau.setRowHidden(row, not texte_true)     
+            
+
+recherche_ligne.textChanged.connect(recherche)
 
 #>>>>> initialisation et fermeture de l'interface <<<<<<
 
