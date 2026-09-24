@@ -100,7 +100,6 @@ recherche_box.addWidget(recherche_ligne) #ajouter la prise de texte dans notre b
 main_box.addLayout(recherche_box) #ajouter notre boite de recherche dans notre main box
 
 def recherche(texte_cherche):
-    print("help")
     texte_recherche = texte_cherche.lower() #permet d'ignorer les majuscules
 
     for row in range(tableau.rowCount()):
